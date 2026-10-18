@@ -1,0 +1,1 @@
+import Header from '@/components/Header';import Footer from '@/components/Footer';import AdminPanel from '@/components/AdminPanel';export default function AdminPage(){return <><Header/><main className="container section"><AdminPanel/></main><Footer/></>}
