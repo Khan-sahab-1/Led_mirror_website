@@ -832,6 +832,12 @@ export default function CheckoutForm() {
             <span>Insured Wooden Crate Delivery</span>
             <span className="gold-text">FREE</span>
           </div>
+          {isHyderabad && (
+            <div className="breakdown-row highlight-hyd">
+              <span>Professional Wall Installation</span>
+              <span className="green-text font-bold">FREE (Hyd VIP)</span>
+            </div>
+          )}
           <div className="breakdown-row">
             <span>GST & Packaging Taxes</span>
             <span className="gold-text">Included</span>

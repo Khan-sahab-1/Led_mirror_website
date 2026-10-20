@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AddToCart from "@/components/AddToCart";
 import ProductGallery from "@/components/ProductGallery";
+import PincodeChecker from "@/components/PincodeChecker";
 import { formatINR, products } from "@/lib/products";
 import { getProductBySlug } from "@/lib/products-server";
 import Link from "next/link";
@@ -34,9 +35,13 @@ export default async function ProductPage({
       <main className="container section-spacing">
         {/* Breadcrumb Navigation */}
         <nav className="breadcrumb-nav mb-20" aria-label="Breadcrumb">
-          <Link href="/" className="breadcrumb-link">Home</Link>
+          <Link href="/" className="breadcrumb-link">
+            Home
+          </Link>
           <span className="breadcrumb-separator">/</span>
-          <Link href="/#shop" className="breadcrumb-link">Shop Mirrors</Link>
+          <Link href="/#shop" className="breadcrumb-link">
+            Shop Mirrors
+          </Link>
           <span className="breadcrumb-separator">/</span>
           <span className="breadcrumb-current">{product.name}</span>
         </nav>
@@ -62,7 +67,9 @@ export default async function ProductPage({
               <div className="product-rating-row">
                 <span className="stars-gold">★★★★★</span>
                 <span className="rating-score">4.9</span>
-                <span className="muted text-xs">(38 Verified Architect & Homeowner Reviews)</span>
+                <span className="muted text-xs">
+                  (48 Verified Homeowners &amp; Architects in Hyderabad)
+                </span>
               </div>
             </div>
 
@@ -81,6 +88,9 @@ export default async function ProductPage({
               <p>{product.description}</p>
             </div>
 
+            {/* Pincode & Installation Checker */}
+            <PincodeChecker />
+
             {/* HYDERABAD VIP PERKS & CONVERSION BOX */}
             <div className="product-vip-perks-box glass-panel mb-25">
               <div className="vip-perks-header">
@@ -93,35 +103,47 @@ export default async function ProductPage({
                   <span className="vip-perk-icon">🚚</span>
                   <div>
                     <strong>Free 24–48h Express Delivery</strong>
-                    <span className="text-xxs muted block">Across all Hyderabad &amp; Secunderabad pincodes</span>
+                    <span className="text-xxs muted block">
+                      Across all Hyderabad &amp; Secunderabad pincodes
+                    </span>
                   </div>
                 </div>
                 <div className="vip-perk-item">
                   <span className="vip-perk-icon">🛠️</span>
                   <div>
                     <strong>Free Certified Wall Fitting</strong>
-                    <span className="text-xxs muted block">Laser-level mounting included (Worth ₹1,499)</span>
+                    <span className="text-xxs muted block">
+                      Laser-level mounting included (Worth ₹1,499)
+                    </span>
                   </div>
                 </div>
                 <div className="vip-perk-item">
                   <span className="vip-perk-icon">💵</span>
                   <div>
                     <strong>Pay on Delivery (COD)</strong>
-                    <span className="text-xxs muted block">Open crate &amp; inspect glass before paying</span>
+                    <span className="text-xxs muted block">
+                      Open crate &amp; inspect glass before paying
+                    </span>
                   </div>
                 </div>
                 <div className="vip-perk-item">
                   <span className="vip-perk-icon">💎</span>
                   <div>
                     <strong>5-Year Replacement Warranty</strong>
-                    <span className="text-xxs muted block">Saint-Gobain diamond glass &amp; LEDs covered</span>
+                    <span className="text-xxs muted block">
+                      Saint-Gobain diamond glass &amp; LEDs covered
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="vip-perks-footer">
                 <a
-                  href={`https://wa.me/919876543210?text=${encodeURIComponent(`Hi GlassStudio Hyderabad! I want to order "${product.name}" (${formatINR(product.price)}) with Free Express Delivery & Free Wall Installation. Please assist!`)}`}
+                  href={`https://wa.me/919266472817?text=${encodeURIComponent(
+                    `Hi GlassStudio Hyderabad! I want to order "${product.name}" (${formatINR(
+                      product.price
+                    )}) with Free Express Delivery & Free Wall Installation. Please assist!`
+                  )}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="whatsapp-vip-order-btn"
@@ -137,11 +159,15 @@ export default async function ProductPage({
               <div className="specs-table-grid">
                 <div className="spec-row">
                   <span className="spec-key">Dimensions / Size</span>
-                  <span className="spec-val font-semibold">{product.dimensions || "24 × 36 inches"}</span>
+                  <span className="spec-val font-semibold">
+                    {product.dimensions || "24 × 36 inches"}
+                  </span>
                 </div>
                 <div className="spec-row">
                   <span className="spec-key">Glass Purity</span>
-                  <span className="spec-val">{product.glass_specs || "5mm Saint-Gobain Float Glass"}</span>
+                  <span className="spec-val">
+                    {product.glass_specs || "5mm Saint-Gobain Float Glass"}
+                  </span>
                 </div>
                 <div className="spec-row">
                   <span className="spec-key">Silhouette / Shape</span>
@@ -152,16 +178,23 @@ export default async function ProductPage({
                 <div className="spec-row">
                   <span className="spec-key">Illumination</span>
                   <span className="spec-val">
-                    {product.lighting_specs || (product.led ? "CRI 95+ High-Density 12V LED Strip" : "Ambient Reflection (Non-LED)")}
+                    {product.lighting_specs ||
+                      (product.led
+                        ? "CRI 95+ High-Density 12V LED Strip (Tricolor)"
+                        : "Ambient Reflection (Non-LED)")}
                   </span>
                 </div>
                 <div className="spec-row">
                   <span className="spec-key">Mounting Hardware</span>
-                  <span className="spec-val">{product.mounting || "Heavy-Duty Flush French-Cleat Included"}</span>
+                  <span className="spec-val">
+                    {product.mounting || "Heavy-Duty Flush French-Cleat Included"}
+                  </span>
                 </div>
                 <div className="spec-row">
-                  <span className="spec-key">Warranty & Assurance</span>
-                  <span className="spec-val">{product.warranty || "5-Year Structural & LED Replacement"}</span>
+                  <span className="spec-key">Warranty &amp; Assurance</span>
+                  <span className="spec-val">
+                    {product.warranty || "5-Year Structural & LED Replacement"}
+                  </span>
                 </div>
               </div>
             </div>

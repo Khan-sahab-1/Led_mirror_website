@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Product } from "@/lib/products";
+import { openCartDrawer } from "./CartDrawer";
 
 type CartItem = {
   productId: string;
@@ -45,7 +45,9 @@ export default function AddToCart({
     setBusy(true);
     const cart = readCart();
     const found = cart.find(
-      (x) => x.productId === targetId || (product?.slug && (x.productId === product.slug || x.slug === product.slug))
+      (x) =>
+        x.productId === targetId ||
+        (product?.slug && (x.productId === product.slug || x.slug === product.slug))
     );
 
     if (found) {
@@ -75,8 +77,11 @@ export default function AddToCart({
     if (andCheckout) {
       router.push("/checkout");
     } else {
-      setMessage(`✓ ${qty} × ${targetName} added to your bag.`);
-      setTimeout(() => setMessage(""), 3500);
+      setMessage(`✓ Added ${qty} × ${targetName} to your bag.`);
+      setTimeout(() => {
+        setMessage("");
+        openCartDrawer();
+      }, 300);
       setBusy(false);
     }
   }
@@ -126,7 +131,14 @@ export default function AddToCart({
 
       {message && (
         <div className="alert-success mt-12 text-sm" role="status">
-          {message} • <Link href="/checkout" className="underline font-bold">Go to Checkout</Link>
+          {message} •{" "}
+          <button
+            type="button"
+            onClick={openCartDrawer}
+            className="underline font-bold"
+          >
+            View Bag
+          </button>
         </div>
       )}
     </div>
