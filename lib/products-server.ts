@@ -3,8 +3,11 @@ import { Product, products, normalizeProduct } from "./products";
 
 export async function getStoreProducts(): Promise<Product[]> {
   try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const key =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
     if (!url || !key) return products;
 
     const supabase = createClient(url, key, { auth: { persistSession: false } });
@@ -27,8 +30,11 @@ export async function getStoreProducts(): Promise<Product[]> {
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const key =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
     if (!url || !key) {
       return products.find((p) => p.slug === slug) || null;
     }
@@ -50,4 +56,3 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     return products.find((p) => p.slug === slug) || null;
   }
 }
-
