@@ -39,6 +39,12 @@ export const products: Product[] = [
     mounting: "Heavy-Duty French Cleat Wall Mount Included",
     lighting_specs: "3000K-6000K Tri-Color LED with Touch Dimmer",
     warranty: "5-Year Replacement Warranty on Frame & LED",
+    image_url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
   {
@@ -58,6 +64,11 @@ export const products: Product[] = [
     mounting: "Dual Precision Keyhole Brackets Included",
     lighting_specs: "Natural Optical Reflection (Ambient)",
     warranty: "5-Year Moisture & Rust Resistance Warranty",
+    image_url: "https://images.unsplash.com/photo-1594913785162-e678a0c23ec9?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1594913785162-e678a0c23ec9?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
   {
@@ -77,6 +88,11 @@ export const products: Product[] = [
     mounting: "Horizontal & Vertical Heavy-Duty French Cleat Included",
     lighting_specs: "Circadian Warm-to-Cool Backlight Strip (CRI 95+)",
     warranty: "5-Year Full Replacement Guarantee",
+    image_url: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
   {
@@ -96,6 +112,11 @@ export const products: Product[] = [
     mounting: "Free-standing Kickstand + Anti-Tip Wall Anchor Kit",
     lighting_specs: "True-to-Life Natural Reflection",
     warranty: "5-Year Structural Frame Warranty",
+    image_url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
   {
@@ -115,6 +136,11 @@ export const products: Product[] = [
     mounting: "Heavy-Duty Pre-installed Z-Bar Bracket",
     lighting_specs: "Natural Architectural Ambient Reflection",
     warranty: "5-Year Finish & Structural Warranty",
+    image_url: "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
   {
@@ -134,47 +160,76 @@ export const products: Product[] = [
     mounting: "Aircraft-Grade Aluminum Hanging System Included",
     lighting_specs: "Ultra-High Lumens 12V Dual LED Ring with Memory Touch Sensor",
     warranty: "5-Year Comprehensive Electric & Glass Warranty",
+    image_url: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=1200&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    ],
     active: true,
   },
 ];
 
 export function normalizeProduct(row: any): Product {
-  const compPrice = row.compare_at != null ? Number(row.compare_at) : (row.compareAt != null ? Number(row.compareAt) : null);
-  const rawImages = Array.isArray(row.images)
+  const compPrice =
+    row.compare_at != null
+      ? Number(row.compare_at)
+      : row.compareAt != null
+      ? Number(row.compareAt)
+      : null;
+
+  const rawImages: string[] = Array.isArray(row.images)
     ? row.images.filter(Boolean)
-    : (row.image_url ? [row.image_url] : []);
-  const primaryImg = rawImages[0] || row.image_url || null;
+    : row.image_url
+    ? [row.image_url]
+    : [];
+
+  let primaryImg = rawImages[0] || row.image_url || null;
+
+  // Fallback to high-res catalog mirror photo if DB has no image yet!
+  if (!primaryImg && row.slug) {
+    const fallback = products.find((p) => p.slug === row.slug);
+    if (fallback) {
+      primaryImg = fallback.image_url || null;
+      if (rawImages.length === 0 && fallback.images) {
+        rawImages.push(...fallback.images);
+      }
+    }
+  }
 
   return {
-      id: String(row.id),
-      slug: String(row.slug),
-      name: String(row.name),
-      category: String(row.category || "Wall Mirror"),
-      price: Number(row.price) || 0,
-      compareAt: compPrice,
-      compare_at: compPrice,
-      description: String(row.description || ""),
-      shape: (row.shape || "rect") as Product["shape"],
-      led: Boolean(row.led),
-      badge: row.badge || null,
-      dimensions: row.dimensions || "24 × 36 inches",
-      glass_specs: row.glass_specs || "5mm Saint-Gobain Float Glass",
-      mounting: row.mounting || "Heavy-Duty French Cleat Included",
-      lighting_specs: row.lighting_specs || (row.led ? "Warm & Cool LED Dimmer" : "Natural Ambient Reflection"),
-      warranty: row.warranty || "5-Year Structural & LED Warranty",
-      image_url: primaryImg,
-      images: rawImages,
-      active: row.active !== false,
-      created_at: row.created_at,
-    };
-  }
+    id: String(row.id),
+    slug: String(row.slug),
+    name: String(row.name),
+    category: String(row.category || "Wall Mirror"),
+    price: Number(row.price) || 0,
+    compareAt: compPrice,
+    compare_at: compPrice,
+    description: String(row.description || ""),
+    shape: (row.shape || "rect") as Product["shape"],
+    led: Boolean(row.led),
+    badge: row.badge || null,
+    dimensions: row.dimensions || "24 × 36 inches",
+    glass_specs: row.glass_specs || "5mm Saint-Gobain Float Glass",
+    mounting: row.mounting || "Heavy-Duty French Cleat Included",
+    lighting_specs:
+      row.lighting_specs ||
+      (row.led ? "Warm & Cool LED Dimmer" : "Natural Ambient Reflection"),
+    warranty: row.warranty || "5-Year Structural & LED Warranty",
+    image_url: primaryImg,
+    images: rawImages,
+    active: row.active !== false,
+    created_at: row.created_at,
+  };
+}
 
-  export function formatINR(amount: number) {
-    const num = Math.round(Number(amount) || 0);
-    const str = Math.abs(num).toString();
-    const lastThree = str.length > 3 ? str.slice(-3) : str;
-    const remaining = str.length > 3 ? str.slice(0, -3) : "";
-    const formatted = remaining !== "" ? remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree : lastThree;
-    return num < 0 ? `-₹${formatted}` : `₹${formatted}`;
-  }
-
+export function formatINR(amount: number) {
+  const num = Math.round(Number(amount) || 0);
+  const str = Math.abs(num).toString();
+  const lastThree = str.length > 3 ? str.slice(-3) : str;
+  const remaining = str.length > 3 ? str.slice(0, -3) : "";
+  const formatted =
+    remaining !== ""
+      ? remaining.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + "," + lastThree
+      : lastThree;
+  return num < 0 ? `-₹${formatted}` : `₹${formatted}`;
+}
